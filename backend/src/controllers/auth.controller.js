@@ -44,17 +44,52 @@ export async function signup(req, res) {
             secure: process.env.NODE_ENV === "production"
         })
 
-        res.status(201).json({ sucess: true, user: newUser })
+        res.status(200).json({ sucess: true, user: newUser })
     } catch (error) {
-        console.log("Error in SignUp Controller", error)
-        res.status(500).json({messege: "Internal Server Error"})
+        console.log("Error in SignUp Controller", error.message)
+        res.status(500).json({ messege: "Internal Server Error" })
     }
 }
 
 export function logout(req, res) {
-    res.send("logout")
+    res.clearCookie("jwt")
+    res.status(200).json({ sucess: true, message: "Logout Successful" })
 }
 
 export async function login(req, res) {
-    res.send("login")
+
+    const { email, password } = req.body
+    try {
+
+        if (!email || !password) {
+            return res.status(400).json({ message: " Email and Password are required" })
+        }
+
+        const user = await User.findOne({ email })
+        if (!user) {
+            return res.status(401).json({ messege: "Invalid Email or Password" })
+        }
+
+        const isPasswordCorrect = await user.matchPassword(password);
+        if (!isPasswordCorrect) {
+            return res.status(401).json({ messege: "Invalid Email or Password" })
+        }
+
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY, {
+            expiresIn: "7d"
+        })
+
+        res.cookie("jwt", token, {
+            maxAge: 7 * 24 * 24 * 60 * 1000,
+            httpOnly: true,
+            sameSite: "strict",
+            secure: process.env.NODE_ENV === "production"
+        })
+
+        res.status(200).json({ sucess: true, user: user })
+
+    } catch (error) {
+        console.log("Error in Login Controller", error.message)
+        res.status(500).json({ messege: "Internal Server Error" })
+    }
 }
