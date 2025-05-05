@@ -105,3 +105,7 @@ export async function login(req, res) {
         res.status(500).json({ messege: "Internal Server Error" })
     }
 }
+
+export async function onboard(req, res){
+    
+}
