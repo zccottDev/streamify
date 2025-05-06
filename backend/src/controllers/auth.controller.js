@@ -106,6 +106,27 @@ export async function login(req, res) {
     }
 }
 
-export async function onboard(req, res){
-    
+export async function onboard(req, res) {
+    try {
+        const userId = req.user._id
+        const { fullName, bio, nativeLanguage, learningLanguage, lacation } = req.body
+
+        if (!fullName || !bio || !nativeLanguage || !learningLanguage || !lacation) {
+            return res.status(400).json({
+                message: "All fields are required"
+            })
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(userId, {
+            ...req.body,
+            isOnboarded: true
+        }, { new: true })
+
+        if(updatedUser) return res.status(404).json({message:"User not found"})
+        
+        res.status(200).json({ success: true, user: updatedUser})
+    } catch (error) {
+        console.log("Error in Onboarding", error.message)
+        res.status(500).json({ messege: "Internal Server Error" })
+    }
 }
