@@ -10,4 +10,8 @@ router.post("/logout",logout)
 
 router.post("/onboard",protectRoute,onboard)
 
+router.get("/me",protectRoute,(req, res) => {
+    res.status(200).json({ success:true, user:req.user })
+})
+
 export default router
