@@ -31,3 +31,5 @@ export async function getMyFriends(res, req) {
         res.status(500).json({ messege: "Internal Server Error" })
     }
 }
+
+export async function sendFriendRequest(res,req){}
