@@ -8,6 +8,8 @@ import Call from "./pages/Call.jsx";
 import Chat from "./pages/Chat.jsx";
 import Onboarding from "./pages/Onboarding.jsx";
 
+import { Toaster } from "react-hot-toast";
+
 const App = () => {
   return (
     <div className="h-screen" data-theme="night">
@@ -21,6 +23,8 @@ const App = () => {
         <Route path="/chat" element={<Chat />}/>
         <Route path="/onboarding" element={<Onboarding />}/>
       </Routes>
+
+      <Toaster />
     </div>
   );
 };
