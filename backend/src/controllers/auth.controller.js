@@ -15,7 +15,7 @@ export async function signup(req, res) {
         }
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            return res.status(400).json({ message: "Invalid email format" });
+            return res.status(400).json({ messege: "Invalid email format" });
         }
 
         const existingUser = await User.findOne({ email })
@@ -58,14 +58,14 @@ export async function signup(req, res) {
 
         res.status(200).json({ sucess: true, user: newUser })
     } catch (error) {
-        console.log("Error in SignUp Controller", error.message)
+        console.log("Error in SignUp Controller", error.messege)
         res.status(500).json({ messege: "Internal Server Error" })
     }
 }
 
 export function logout(req, res) {
     res.clearCookie("jwt")
-    res.status(200).json({ sucess: true, message: "Logout Successful" })
+    res.status(200).json({ sucess: true, messege: "Logout Successful" })
 }
 
 export async function login(req, res) {
@@ -74,7 +74,7 @@ export async function login(req, res) {
     try {
 
         if (!email || !password) {
-            return res.status(400).json({ message: " Email and Password are required" })
+            return res.status(400).json({ messege: " Email and Password are required" })
         }
 
         const user = await User.findOne({ email })
@@ -101,7 +101,7 @@ export async function login(req, res) {
         res.status(200).json({ sucess: true, user: user })
 
     } catch (error) {
-        console.log("Error in Login Controller", error.message)
+        console.log("Error in Login Controller", error.messege)
         res.status(500).json({ messege: "Internal Server Error" })
     }
 }
@@ -115,7 +115,7 @@ export async function onboard(req, res) {
 
         if (!fullName || !bio || !nativeLanguage || !learningLanguage || !location) {
             return res.status(400).json({
-                message: "All fields are required",
+                messege: "All fields are required",
                 missingFields:[
                     !fullName && "fullName",
                     !bio && "bio",
@@ -142,14 +142,14 @@ export async function onboard(req, res) {
 
             console.log(`Stream user updated after onboarding for ${updatedUser.fullName}`)
         } catch (streamError) {
-            console.log("Error updating Stream user during onboarding", streamError.message)
+            console.log("Error updating Stream user during onboarding", streamError.messege)
         }
 
-        if (!updatedUser) return res.status(404).json({ message: "User not found" })
+        if (!updatedUser) return res.status(404).json({ messege: "User not found" })
 
         res.status(200).json({ success: true, user: updatedUser })
     } catch (error) {
-        console.log("Error in Onboarding", error.message)
+        console.log("Error in Onboarding", error.messege)
         res.status(500).json({ messege: "Internal Server Error" })
     }
 }
